@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container text-center py-5">
+  <div class="display-6 mb-3">Thanks! Your order was placed.</div>
+  <p class="text-muted">We’ll redirect you to the home page.</p>
+</div>
+<script>
+  // Clear cart then redirect home immediately
+  localStorage.removeItem('cart');
+  if (window.updateCartCount) updateCartCount();
+  window.location = "{{ url_for('home') }}";
+</script>
+{% endblock %}

@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title or "SU7-Ecommerce" }}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="{{ url_for('home') }}">SU7.9-Python</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div id="mainNav" class="collapse navbar-collapse">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link{% if request.endpoint=='home' %} active{% endif %}" href="{{ url_for('home') }}">Home</a></li>
+        <li class="nav-item"><a class="nav-link{% if request.endpoint and request.endpoint.startswith('admin_') %} active{% endif %}" href="{{ url_for('admin_login') }}">Admin</a></li>
+      </ul>
+      <form class="d-flex me-3" role="search" action="{{ url_for('search') }}">
+        <input class="form-control me-2" type="search" placeholder="Search products…" name="q" value="{{ request.args.get('q','') }}">
+        <button class="btn btn-outline-light" type="submit"><i class="bi bi-search"></i></button>
+      </form>
+      <a href="{{ url_for('cart') }}" class="btn btn-primary position-relative">
+        <i class="bi bi-cart"></i> Cart
+        <span id="cart-count-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">0</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <div class="container mt-3">
+    {% for cat, msg in messages %}
+      <div class="alert alert-{{ cat }} alert-dismissible fade show" role="alert">
+        {{ msg }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+{% endwith %}
+
+<main class="py-4">
+  {% block content %}{% endblock %}
+</main>
+<!-- ====== Big Ecommerce Footer ====== -->
+<footer class="site-footer mt-auto text-light">
+  <!-- Newsletter -->
+  <div class="footer-newsletter bg-primary">
+    <div class="container py-4">
+      <div class="row align-items-center g-3">
+        <div class="col-lg-5">
+          <h5 class="mb-1 fw-bold">Join our newsletter</h5>
+          <div class="small text-white-50">Get updates on deals, new arrivals, and more.</div>
+        </div>
+        <div class="col-lg-7">
+          <form class="row g-2" onsubmit="event.preventDefault(); alert('Thanks for subscribing!');">
+            <div class="col-md-8">
+              <input type="email" class="form-control form-control-lg" placeholder="Enter your email" required>
+            </div>
+            <div class="col-md-4 d-grid">
+              <button class="btn btn-dark btn-lg" type="submit">Subscribe</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main footer -->
+  <div class="bg-dark">
+    <div class="container py-5">
+<div class="row g-4">
+  <!-- Brand / About -->
+  <div class="col-md-3">
+    <a class="navbar-brand text-light fs-4 fw-bold" href="{{ url_for('home') }}">SU7-Python</a>
+    <p class="text-white-50 mt-2">
+      Quality picks, fast shipping, and easy returns. Build your setup, your way.
+    </p>
+    <div class="d-flex gap-3 mt-3 fs-4">
+      <a class="text-light opacity-75" href="#"><i class="bi bi-facebook"></i></a>
+      <a class="text-light opacity-75" href="#"><i class="bi bi-instagram"></i></a>
+      <a class="text-light opacity-75" href="#"><i class="bi bi-twitter-x"></i></a>
+      <a class="text-light opacity-75" href="#"><i class="bi bi-youtube"></i></a>
+    </div>
+  </div>
+
+  <!-- Customer Service -->
+  <div class="col-md-3">
+    <h6 class="text-uppercase small text-white-50">Customer Service</h6>
+    <ul class="list-unstyled mt-3 footer-links">
+      <li><a href="#">Help Center</a></li>
+      <li><a href="#">Shipping & Delivery</a></li>
+      <li><a href="#">Returns & Refunds</a></li>
+      <li><a href="#">Track Order</a></li>
+    </ul>
+  </div>
+
+  <!-- Midterm -->
+  <div class="col-md-3">
+    <h6 class="text-uppercase small text-white-50">Midterm SU7.9</h6>
+    <ul class="list-unstyled mt-3 footer-links">
+      <li><span class="badge bg-warning text-dark">Lecturer</span>ជឿន ពិនឆៃ</li>
+      <li>Group SU7.9</li>
+      <li>Subject:Python</li>
+    </ul>
+  </div>
+
+  <!-- Team -->
+
+
+      <hr class="footer-hr my-4">
+
+      <div class="d-flex flex-column flex-md-row align-items-center justify-content-between">
+        <div class="small text-white-50 mb-3 mb-md-0">
+          © {{ current_year }} SU7.9-Python • All rights reserved.
+        </div>
+        <div class="d-flex align-items-center gap-3 text-white-50">
+          <i class="bi bi-shield-lock"></i> Secure checkout
+          <span class="vr opacity-25"></span>
+          <i class="bi bi-credit-card-2-front"></i> Visa
+          <i class="bi bi-credit-card"></i> MasterCard
+          <i class="bi bi-paypal"></i> PayPal
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='cart.js') }}"></script>
+<script>
+  // Init cart badge on every page
+  document.addEventListener('DOMContentLoaded', () => {
+    if (window.updateCartCount) updateCartCount();
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container" style="max-width:900px;">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h2 class="mb-0">{{ "New Product" if mode=="new" else "Edit Product" }}</h2>
+    <a href="{{ url_for('admin_products') }}" class="btn btn-outline-secondary">Back</a>
+  </div>
+
+  <form method="post" class="card shadow-sm">
+    <div class="card-body">
+      <div class="row g-4">
+        <div class="col-md-7">
+          <div class="mb-3">
+            <label class="form-label">Title</label>
+            <input name="title" class="form-control" required value="{{ p['title'] if p else '' }}">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea name="description" class="form-control" rows="6" required>{{ p['description'] if p else '' }}</textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Price (USD)</label>
+            <input name="price" class="form-control" type="number" step="0.01" min="0" required value="{{ p['price'] if p else '' }}">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Image URL</label>
+            <input id="imageInput" name="image" class="form-control" required value="{{ p['image'] if p else '' }}" oninput="previewImage(this.value)">
+            <div class="form-text">Paste a direct image URL (e.g., https://picsum.photos/id/433/800/800)</div>
+          </div>
+        </div>
+        <div class="col-md-5">
+          <label class="form-label">Preview</label>
+          <div class="ratio ratio-1x1 border rounded overflow-hidden">
+            <img id="imgPreview" src="{{ p['image'] if p else 'https://picsum.photos/id/0/800/800' }}" alt="Preview" style="object-fit:cover;">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer text-end">
+      <button class="btn btn-primary" type="submit">{{ "Create" if mode=="new" else "Save changes" }}</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  function previewImage(url){
+    const img = document.getElementById('imgPreview');
+    img.src = url || 'https://picsum.photos/id/0/800/800';
+  }
+</script>
+{% endblock %}

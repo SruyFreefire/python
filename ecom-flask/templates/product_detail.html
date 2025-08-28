@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <div class="row g-4">
+    <div class="col-md-6">
+      <div class="position-relative">
+        <img src="{{ p['image'] }}" class="img-fluid rounded shadow-sm" alt="{{ p['title'] }}">
+        <span class="badge bg-dark position-absolute top-0 start-0 m-2">{{ category }}</span>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <h2 class="mb-1">{{ p['title'] }}</h2>
+      <div class="d-flex align-items-center mb-3">
+        <span class="stars" style="--rating: {{ rating }};"></span>
+        <span class="ms-2 small text-muted">{{ rating }}/5</span>
+      </div>
+      <p class="lead">${{ '%.2f'|format(p['price']) }}</p>
+      <p class="text-muted">{{ p['description'] }}</p>
+
+      <div class="d-flex align-items-center gap-2 my-3">
+        <input type="number" id="qty" class="form-control" style="max-width:120px" min="1" value="1">
+        <button class="btn btn-primary"
+                data-id="{{ p['id'] }}"
+                data-title="{{ p['title'] }}"
+                data-price="{{ p['price'] }}"
+                data-image="{{ p['image'] }}"
+                onclick="addToCartFromDetail(this)">
+          <i class="bi bi-bag-plus"></i> Add to cart
+        </button>
+      </div>
+
+      <a href="{{ url_for('cart') }}" class="btn btn-outline-secondary"><i class="bi bi-cart"></i> Go to cart</a>
+    </div>
+  </div>
+</div>
+<script>
+  function addToCartFromDetail(btn){
+    const qty = parseInt(document.getElementById('qty').value || '1');
+    const product = {
+      id: parseInt(btn.dataset.id),
+      title: btn.dataset.title,
+      price: parseFloat(btn.dataset.price),
+      image: btn.dataset.image
+    };
+    addToCart(product, qty);
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <h2 class="mb-4"><i class="bi bi-credit-card"></i> Order</h2>
+
+  <div class="row g-4">
+    <div class="col-lg-7">
+      <div class="card shadow-sm">
+        <div class="card-header">Order Summary</div>
+        <div class="card-body">
+          <div id="order-summary"></div>
+          <div class="text-end mt-3 h5">Total: <span id="order-total">$0.00</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-5">
+      <form id="orderForm" method="post" class="card shadow-sm">
+        <div class="card-header">Your Info</div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input name="name" class="form-control" required>
+          </div>
+            <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input name="email" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Phone</label>
+            <input name="phone" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Note (optional)</label>
+            <textarea name="note" class="form-control" rows="3"></textarea>
+          </div>
+          <input type="hidden" name="order_json" id="order_json">
+          <button class="btn btn-primary w-100" type="submit">Place Order</button>
+        </div>
+      </form>
+      <div class="alert alert-info mt-3">
+        On success, we’ll notify a Telegram bot (if configured) and redirect you home.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Render summary and attach order payload
+  function renderOrderSummary(){
+    const el = document.getElementById('order-summary');
+    const totalEl = document.getElementById('order-total');
+    const cart = getCart();
+    if (!cart.length){
+      el.innerHTML = '<div class="alert alert-warning">Your cart is empty. <a href="{{ url_for("home") }}">Go back</a>.</div>';
+      totalEl.textContent = '$0.00';
+      return;
+    }
+    let html = '<ul class="list-group list-group-flush">';
+    let total = 0;
+    cart.forEach(item => {
+      const subtotal = item.qty * item.price;
+      total += subtotal;
+      html += `
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <div class="d-flex align-items-center gap-3">
+            <img src="${item.image}" alt="${item.title}" style="width:60px;height:60px;object-fit:cover;border-radius:6px;">
+            <div>
+              <div class="fw-semibold">${item.title}</div>
+              <div class="text-muted small">$${item.price.toFixed(2)} × ${item.qty}</div>
+            </div>
+          </div>
+          <div>$${subtotal.toFixed(2)}</div>
+        </li>`;
+    });
+    html += '</ul>';
+    el.innerHTML = html;
+    totalEl.textContent = `$${total.toFixed(2)}`;
+    return total;
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const total = renderOrderSummary();
+    const form = document.getElementById('orderForm');
+    form.addEventListener('submit', (e) => {
+      const cart = getCart();
+      if (!cart.length){
+        e.preventDefault();
+        alert('Your cart is empty.');
+        return;
+      }
+      const payload = { items: cart, total: cart.reduce((s, it) => s + it.qty * it.price, 0) };
+      document.getElementById('order_json').value = JSON.stringify(payload);
+    });
+  });
+</script>
+{% endblock %}

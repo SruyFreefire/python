@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <h2 class="mb-4"><i class="bi bi-cart"></i> Your Cart</h2>
+
+  <div id="cart-empty" class="text-center py-5 d-none">
+    <p class="lead mb-4">Your cart is empty.</p>
+    <a class="btn btn-primary" href="{{ url_for('home') }}"><i class="bi bi-arrow-left"></i> Continue shopping</a>
+  </div>
+
+  <div id="cart-filled" class="d-none">
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th style="width:120px;">Price</th>
+            <th style="width:140px;">Qty</th>
+            <th style="width:140px;">Subtotal</th>
+            <th style="width:70px;"></th>
+          </tr>
+        </thead>
+        <tbody id="cart-body"></tbody>
+      </table>
+    </div>
+    <div class="d-flex justify-content-between align-items-center">
+      <a class="btn btn-outline-secondary" href="{{ url_for('home') }}"><i class="bi bi-arrow-left"></i> Continue shopping</a>
+      <div class="text-end">
+        <div class="h5">Total: <span id="cart-total">$0.00</span></div>
+        <a class="btn btn-primary mt-2" href="{{ url_for('order') }}"><i class="bi bi-credit-card"></i> Order</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', renderCart);
+</script>
+{% endblock %}

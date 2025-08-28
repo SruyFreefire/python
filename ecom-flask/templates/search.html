@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <h3 class="mb-3">Search{% if q %}: “{{ q }}”{% endif %}</h3>
+
+  {% if q and not products %}
+    <div class="alert alert-info">No results found.</div>
+  {% endif %}
+
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    {% for p in products %}
+    <div class="col">
+      <div class="card product-card h-100 shadow-sm">
+        <div class="position-relative">
+          <a href="{{ url_for('product_detail', pid=p['id']) }}">
+            <img src="{{ p['image'] }}" class="card-img-top product-img" alt="{{ p['title'] }}">
+          </a>
+          <span class="badge bg-dark position-absolute top-0 start-0 m-2">{{ category_map.get(p['id'], 'General') }}</span>
+        </div>
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">{{ p['title'] }}</h5>
+          <p class="card-text text-muted small">{{ p['description'] }}</p>
+
+          <div class="mt-auto">
+            <div class="d-flex align-items-center mb-2">
+              <span class="stars" style="--rating: {{ rating_map.get(p['id'], 4.5) }};"></span>
+              <span class="ms-2 small text-muted">{{ rating_map.get(p['id'], 4.5) }}/5</span>
+            </div>
+            <div class="d-flex align-items-center justify-content-between">
+              <span class="price h5 mb-0">${{ '%.2f'|format(p['price']) }}</span>
+              <button class="btn btn-primary"
+                      data-id="{{ p['id'] }}"
+                      data-title="{{ p['title'] }}"
+                      data-price="{{ p['price'] }}"
+                      data-image="{{ p['image'] }}"
+                      onclick="addToCartFromButton(this)">
+                <i class="bi bi-bag-plus"></i> Add to cart
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+/* General polish */
+body { background-color: #f7f7f9; }
+
+/* Product cards */
+.product-card { transition: transform .12s ease, box-shadow .12s ease; }
+.product-card:hover { transform: translateY(-2px); box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important; }
+.product-img { height: 220px; object-fit: cover; }
+
+/* Rating stars (CSS mask) */
+.stars {
+  --rating: 4.5;
+  --star-size: 1.05rem;
+  --star-color: #e1e1e6;
+  --star-background: #ffd166;
+  display: inline-block;
+  font-size: var(--star-size);
+  font-family: 'Times New Roman', Times, serif;
+  line-height: 1;
+  position: relative;
+}
+.stars::before {
+  content: "★★★★★";
+  letter-spacing: 3px;
+  background: linear-gradient(90deg, var(--star-background) calc(var(--rating) / 5 * 100%), var(--star-color) calc(var(--rating) / 5 * 100%));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* KPI cards (admin) */
+.kpi-card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 .25rem .75rem rgba(0,0,0,.05);
+}
+.kpi-label { color:#6c757d; font-size:.9rem; }
+.kpi-value { font-size:1.6rem; font-weight:700; }
+
+/* Footer */
+footer a:hover { text-decoration: underline; }
+/* Footer polish */
+.site-footer .footer-links li { margin: .4rem 0; }
+.site-footer .footer-links a {
+  color: #cfd3da; text-decoration: none;
+}
+.site-footer .footer-links a:hover { color: #ffffff; text-decoration: underline; }
+
+.site-footer .hover-bright:hover { opacity: 1 !important; }
+.site-footer .footer-hr { border-color: rgba(255,255,255,.15); }
+
+.footer-newsletter input.form-control-lg {
+  border: none;
+}
+.footer-newsletter .btn-lg {
+  border-radius: .6rem;
+}
+.bg-gold {
+  background-color: #FFD700 !important; /* Gold hex code */
+  color: #212529; /* Dark text for contrast */
+}

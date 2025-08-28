@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <div class="d-flex align-items-center justify-content-between mb-4">
+    <h2 class="mb-0">Admin Dashboard</h2>
+    <div>
+      <a href="{{ url_for('admin_products') }}" class="btn btn-outline-primary me-2"><i class="bi bi-grid"></i> Products</a>
+      <a href="{{ url_for('admin_logout') }}" class="btn btn-outline-secondary"><i class="bi bi-box-arrow-right"></i> Logout</a>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-3"><div class="kpi-card">
+      <div class="kpi-label">Visitors today</div>
+      <div class="kpi-value">{{ kpis.visitors_today }}</div>
+    </div></div>
+    <div class="col-md-3"><div class="kpi-card">
+      <div class="kpi-label">Conversion rate</div>
+      <div class="kpi-value">{{ '%.1f'|format(kpis.conversion_rate) }}%</div>
+    </div></div>
+    <div class="col-md-3"><div class="kpi-card">
+      <div class="kpi-label">Revenue today</div>
+      <div class="kpi-value">${{ '%.2f'|format(kpis.revenue_today) }}</div>
+    </div></div>
+    <div class="col-md-3"><div class="kpi-card">
+      <div class="kpi-label">Pending orders</div>
+      <div class="kpi-value">{{ kpis.pending_orders }}</div>
+    </div></div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-header">Weekly Sales</div>
+    <div class="card-body">
+      <canvas id="salesChart" height="110"></canvas>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+  const ctx = document.getElementById('salesChart');
+  const chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: {{ chart_labels|tojson }},
+      datasets: [{
+        label: 'Orders',
+        data: {{ chart_data|tojson }},
+        tension: 0.3,
+        fill: true
+      }]
+    },
+    options: {
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true } }
+    }
+  });
+</script>
+{% endblock %}
